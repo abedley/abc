@@ -84,11 +84,19 @@ document.addEventListener("DOMContentLoaded", function(event) {
   // Feedback
   var feedback = document.getElementById("feedback");
 
+  function createSpan(text, klass) {
+    var node = document.createElement('span');
+    var textnode = document.createTextNode(text);
+    node.appendChild(textnode);
+    node.classList.add(klass);
+    return node;
+  }
+
   function update(correct) {
     if (correct) {
-      feedback.innerHTML += '<span class="green">✓</span>';
+      feedback.appendChild(createSpan('✓', 'green'));
     } else {
-      feedback.innerHTML += '<span class="red">✘</span>';
+      feedback.appendChild(createSpan('✘', 'red'));
     }
 
     /*feedback.classList.remove("fadeOut");
