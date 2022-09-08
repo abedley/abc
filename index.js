@@ -1,4 +1,4 @@
-var alphabet = 'abcdefghijklmnopqrstuvwxyz';
+const alphabet = 'abcdefghijklmnopqrstuvwxyz';
 var rng = function(s) {
     return function(min, max) {
         s = Math.sin(s) * 10000;
@@ -6,17 +6,17 @@ var rng = function(s) {
     };
 };
 
-var randomInt = function(min, max) {
+const randomInt = function(min, max) {
     return Math.floor(Math.random() * (max - min) + min);
 };
 
 document.addEventListener("DOMContentLoaded", function(event) {
-  var random = randomInt;
+  const random = randomInt;
 
   // Time
-  var timer = document.getElementById("timer");
-  var intervalId;
-  var timeLeft;
+  const timer = document.getElementById("timer");
+  let intervalId;
+  let timeLeft;
 
   function updateTime() {
     timeLeft--;
@@ -28,14 +28,14 @@ document.addEventListener("DOMContentLoaded", function(event) {
   }
 
   // Game
-  var before = document.getElementById("before");
-  var after = document.getElementById("after");
-  var score;
-  var maxScore;
+  const before = document.getElementById("before");
+  const after = document.getElementById("after");
+  let score;
+  let maxScore;
 
   function newLetters() {
-    var newBefore = alphabet[random(0, alphabet.length)];
-    var newAfter = alphabet[random(0, alphabet.length)];
+    const newBefore = alphabet[random(0, alphabet.length)];
+    let newAfter = alphabet[random(0, alphabet.length)];
 
     while (newBefore == newAfter) {
       newAfter = alphabet[random(0, alphabet.length)];
@@ -50,10 +50,25 @@ document.addEventListener("DOMContentLoaded", function(event) {
   }
 
   // Buttons
-  var yes = document.getElementById("yes");
-  var no = document.getElementById("no");
+  const yes = document.getElementById("yes");
+  const no = document.getElementById("no");
 
-  yes.addEventListener('click', function() {
+  document.addEventListener('keydown', (event) => {
+    const keyName = event.key;
+    
+    console.log(keyName);
+
+    if (keyName === 'q') {
+      return yesPress();
+    } else if (keyName === 'p') {
+      return noPress();
+    } else if (keyName === 'Enter') {
+      return startGame();
+    }
+    
+  });
+
+  const yesPress = function() {
     if (timeLeft == 0) {
       return;
     }
@@ -61,13 +76,14 @@ document.addEventListener("DOMContentLoaded", function(event) {
       score++;
       update(true);
     } else {
-      update(false);
+      return update(false);
     }
     newLetters();
     maxScore++;
-  });
+  };
+  yes.addEventListener('click', yesPress);
 
-  no.addEventListener('click', function() {
+  const noPress = function() {
     if (timeLeft == 0) {
       return;
     }
@@ -75,18 +91,20 @@ document.addEventListener("DOMContentLoaded", function(event) {
       score++;
       update(true);
     } else {
-      update(false);
+      return update(false);
     }
     newLetters();
     maxScore++;
-  });
+  }
+
+  no.addEventListener('click', noPress);
 
   // Feedback
-  var feedback = document.getElementById("feedback");
+  const feedback = document.getElementById("feedback");
 
   function createSpan(text, klass) {
-    var node = document.createElement('span');
-    var textnode = document.createTextNode(text);
+    const node = document.createElement('span');
+    const textnode = document.createTextNode(text);
     node.appendChild(textnode);
     node.classList.add(klass);
     return node;
@@ -97,23 +115,20 @@ document.addEventListener("DOMContentLoaded", function(event) {
       feedback.appendChild(createSpan('✓', 'green'));
     } else {
       feedback.appendChild(createSpan('✘', 'red'));
+      clearInterval(intervalId);
+      endGame();
     }
-
-    /*feedback.classList.remove("fadeOut");
-    void feedback.offsetWidth; // force redraw
-    feedback.classList.add("fadeOut");*/
   }
 
   // New game
-  var newGame = document.getElementById("newGame");
-  var game = document.getElementById("game");
-  var splash = document.getElementById("splash");
-  var blurb = document.getElementById("blurb");
+  const newGame = document.getElementById("newGame");
+  const game = document.getElementById("game");
+  const splash = document.getElementById("splash");
+  const blurb = document.getElementById("blurb");
 
   newGame.addEventListener('click', startGame);
 
   function startGame() {
-    maxScore = 0;
     score = 0;
     timeLeft = 15 + 1;
     updateTime();
@@ -127,11 +142,15 @@ document.addEventListener("DOMContentLoaded", function(event) {
   }
 
   function endGame() {
-    var percentage = Math.round(score/maxScore * 100);
-    if (percentage !== percentage) {
-      percentage = 0;
+    const prevHighScore = localStorage.getItem('highscore');
+    let newHighScore = (prevHighScore === null) || (parseInt(prevHighScore) < score);
+    if (newHighScore) {
+      localStorage.setItem('highscore', score);
+      blurb.innerHTML = 'You answered <strong>' + score + '</strong> correctly and set a new high score!';
+    } else {
+      blurb.innerHTML = 'You answered <strong>' + score + '</strong> correctly.<br> High score: ' + prevHighScore;
     }
-    blurb.innerHTML = 'You answered <strong>' + score + '</strong> out of <strong>' + maxScore + '</strong> correctly. <span class="percentage">(' + percentage + '%)</span>';
+    
     newGame.textContent = 'Play Again';
 
     game.classList.add("hide");

@@ -2,21 +2,19 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
   <title>abc</title>
   <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
   <link rel="stylesheet" href="css/normalize.css">
   <link rel="stylesheet" href="css/skeleton.css">
   <link rel="stylesheet" href="css/index.css">
-  <link rel="shortcut icon" href="http://us.battle.net/hearthstone/static/images/icons/favicon.ico" />
 </head>
 <body>
   <div class="container">
     <div id="splash">
       <div class="row">
         <h1>ABC</h1>
-        <p id="blurb">How well do you know the order of the alphabet?</p>
+        <p id="blurb">How well do you know the order of the alphabet?<br><span id="shortcuts" class="small">Keyboard shortcuts: q, p, enter</span></p>
         <button id="newGame">New Game</button>
       </div>
       <div class="row">
@@ -32,7 +30,7 @@
         <span id="before" class="big"></span><span class="small"> comes before </span><span id="after" class="big"></span>
       </div>
     </div>
-    <div class="row">
+    <div id="game-buttons" class="row">
       <button id="yes">True</button>
       <button id="no">False</button>
     </div>

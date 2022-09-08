@@ -45,19 +45,6 @@ body {
   font-size: 3em;
 }
 
-.fadeOut {
-  animation-name: fadeOut;
-  animation-duration: 1s;
-  animation-iteration-count: 1;
-  animation-timing-function: ease-out;
-  opacity: 0;
-}
-
-@keyframes fadeOut {
-  0% { opacity: 1; }
-  100% { opacity: 0; }
-}
-
 .hide {
   display: none;
 }
@@ -66,7 +53,8 @@ body {
   margin: 3em 0 2em 0;
 }
 
-.percentage {
-  color: #AAA;
-  font-size: 0.8em;
+@media (pointer:none), (pointer:coarse) {
+  #shortcuts {
+    display:none;
+  }
 }
