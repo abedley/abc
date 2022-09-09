@@ -31,7 +31,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
   const before = document.getElementById("before");
   const after = document.getElementById("after");
   let score;
-  let maxScore;
 
   function newLetters() {
     const newBefore = alphabet[random(0, alphabet.length)];
@@ -55,21 +54,19 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
   document.addEventListener('keydown', (event) => {
     const keyName = event.key;
-    
-    console.log(keyName);
 
     if (keyName === 'q') {
       return yesPress();
     } else if (keyName === 'p') {
       return noPress();
-    } else if (keyName === 'Enter') {
+    } else if (keyName === 'Enter' && gameOver) {
       return startGame();
     }
     
   });
 
   const yesPress = function() {
-    if (timeLeft == 0) {
+    if (gameOver) {
       return;
     }
     if (check()) {
@@ -79,12 +76,11 @@ document.addEventListener("DOMContentLoaded", function(event) {
       return update(false);
     }
     newLetters();
-    maxScore++;
   };
   yes.addEventListener('click', yesPress);
 
   const noPress = function() {
-    if (timeLeft == 0) {
+    if (gameOver) {
       return;
     }
     if (!check()) {
@@ -94,7 +90,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
       return update(false);
     }
     newLetters();
-    maxScore++;
   }
 
   no.addEventListener('click', noPress);
@@ -125,6 +120,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
   const game = document.getElementById("game");
   const splash = document.getElementById("splash");
   const blurb = document.getElementById("blurb");
+  let gameOver = false;
 
   newGame.addEventListener('click', startGame);
 
@@ -133,15 +129,18 @@ document.addEventListener("DOMContentLoaded", function(event) {
     timeLeft = 15 + 1;
     updateTime();
     newLetters();
+    
     feedback.innerHTML = '';
 
     game.classList.remove("hide");
     splash.classList.add("hide");
 
     intervalId = setInterval(updateTime, 1000);
+    gameOver = false;
   }
 
   function endGame() {
+    gameOver = true;
     const prevHighScore = localStorage.getItem('highscore');
     let newHighScore = (prevHighScore === null) || (parseInt(prevHighScore) < score);
     if (newHighScore) {
